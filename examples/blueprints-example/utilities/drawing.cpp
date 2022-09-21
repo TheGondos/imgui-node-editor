@@ -76,8 +76,6 @@ void ax::Drawing::DrawIcon(ImDrawList* drawList, const ImVec2& a, const ImVec2& 
     }
     else
     {
-        auto triangleStart = rect_center_x + 0.32f * rect_w;
-
         auto rect_offset = -static_cast<int>(rect_w * 0.25f * 0.25f);
 
         rect.Min.x    += rect_offset;
@@ -167,8 +165,6 @@ void ax::Drawing::DrawIcon(ImDrawList* drawList, const ImVec2& a, const ImVec2& 
                 tl.y += w * 2;
                 br.y += w * 2;
             }
-
-            triangleStart = br.x + w + 1.0f / 24.0f * rect_w;
         }
 
         if (type == IconType::RoundSquare)
@@ -235,18 +231,29 @@ void ax::Drawing::DrawIcon(ImDrawList* drawList, const ImVec2& a, const ImVec2& 
                 if (innerColor & 0xFF000000)
                     drawList->AddConvexPolyFilled(drawList->_Path.Data, drawList->_Path.Size, innerColor);
 
-                drawList->PathStroke(color, true, 2.0f * outline_scale);
+                drawList->PathStroke(color, ImDrawFlags_Closed, 2.0f * outline_scale);
             }
         }
-        else
+        else if (type == IconType::Pulse)
         {
-            const auto triangleTip = triangleStart + rect_w * (0.45f - 0.32f);
+            const auto r = 0.607f * rect_w / 2.0f - 0.5f;
+            const auto c = rect_center;
 
-            drawList->AddTriangleFilled(
-                ImVec2(ceilf(triangleTip), rect_y + rect_h * 0.5f),
-                ImVec2(triangleStart, rect_center_y + 0.15f * rect_h),
-                ImVec2(triangleStart, rect_center_y - 0.15f * rect_h),
-                color);
+            drawList->PathLineTo(c + ImVec2( -r,  r));
+            drawList->PathLineTo(c + ImVec2(  0,  r));
+            drawList->PathLineTo(c + ImVec2(  0, -r));
+            drawList->PathLineTo(c + ImVec2(  r, -r));
+
+            drawList->PathStroke(color, ImDrawFlags_None, 2.0f * outline_scale);
+        }
+        else if (type == IconType::Pulse)
+        {
+            const auto r = 0.607f * rect_w / 2.0f - 0.5f;
+            const auto c = rect_center;
+
+            drawList->AddLine(c + ImVec2(0, -r), c + ImVec2(0, r), color, 1.0f * outline_scale);
+            drawList->AddLine(c + ImVec2(-r, r), c + ImVec2(r, r), color, 1.0f * outline_scale);
+            drawList->AddLine(c + ImVec2(-r, r), c + ImVec2(r, -r), color, 1.0f * outline_scale);
         }
     }
 }
