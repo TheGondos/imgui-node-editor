@@ -246,14 +246,5 @@ void ax::Drawing::DrawIcon(ImDrawList* drawList, const ImVec2& a, const ImVec2& 
 
             drawList->PathStroke(color, ImDrawFlags_None, 2.0f * outline_scale);
         }
-        else if (type == IconType::Pulse)
-        {
-            const auto r = 0.607f * rect_w / 2.0f - 0.5f;
-            const auto c = rect_center;
-
-            drawList->AddLine(c + ImVec2(0, -r), c + ImVec2(0, r), color, 1.0f * outline_scale);
-            drawList->AddLine(c + ImVec2(-r, r), c + ImVec2(r, r), color, 1.0f * outline_scale);
-            drawList->AddLine(c + ImVec2(-r, r), c + ImVec2(r, -r), color, 1.0f * outline_scale);
-        }
     }
 }
