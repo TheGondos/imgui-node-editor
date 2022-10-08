@@ -246,5 +246,21 @@ void ax::Drawing::DrawIcon(ImDrawList* drawList, const ImVec2& a, const ImVec2& 
 
             drawList->PathStroke(color, ImDrawFlags_None, 2.0f * outline_scale);
         }
+        else if (type == IconType::Plus)
+        {
+            const auto r = 0.7f * rect_w / 2.0f;
+            const float thickness = 1.0;
+            const float margin = 4.0;
+
+            drawList->AddCircleFilled(rect_center, r, color, 12 + extra_segments);
+
+            ImVec2 tl{a.x + margin, a.y + rect_h/2.0f - thickness };
+            ImVec2 br{b.x - margin, b.y - rect_h/2.0f + thickness };
+            drawList->AddRectFilled(tl, br, innerColor);
+
+            ImVec2 tlv{a.x + rect_w/2.0f - thickness , a.y + margin};
+            ImVec2 brv{b.x - rect_w/2.0f + thickness , b.y - margin};
+            drawList->AddRectFilled(tlv, brv, innerColor);
+        }
     }
 }
